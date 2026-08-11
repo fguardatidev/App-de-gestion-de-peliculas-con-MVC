@@ -6,5 +6,11 @@ namespace MvcMovie.Services
     {
         public Task<MovieGenreViewModel> ObtenerPeliculas(string movieGenre, string searchString);
 
+        public Task<Movie?> ObtenerDetalles(int? id);
+
+        public Task<Movie> CrearPelicula(Movie movie);
+
+        public Task<Movie?> EliminarPelicula(int? id);
+
     }
 }

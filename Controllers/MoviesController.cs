@@ -28,19 +28,9 @@ public class MoviesController : Controller
     // GET: MOVIES/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        var movie = await _movieService.ObtenerDetalles(id);
 
-        var movie = await _context.Movie
-            .FirstOrDefaultAsync(m => m.Id == id);
-        if (movie == null)
-        {
-            return NotFound();
-        }
-
-        return View(movie);
+        return movie == null ? NotFound() : View(movie);
     }
 
     // GET: MOVIES/Create
@@ -58,8 +48,7 @@ public class MoviesController : Controller
     {
         if (ModelState.IsValid)
         {
-            _context.Add(movie);
-            await _context.SaveChangesAsync();
+            await _movieService.CrearPelicula(movie);
             return RedirectToAction(nameof(Index));
         }
         return View(movie);
@@ -68,17 +57,8 @@ public class MoviesController : Controller
     // GET: MOVIES/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var movie = await _context.Movie.FindAsync(id);
-        if (movie == null)
-        {
-            return NotFound();
-        }
-        return View(movie);
+        var movie = await _movieService.ObtenerDetalles(id);
+        return movie == null ? NotFound() : View(movie);
     }
 
     // POST: MOVIES/Edit/5
@@ -119,19 +99,8 @@ public class MoviesController : Controller
     // GET: MOVIES/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var movie = await _context.Movie
-            .FirstOrDefaultAsync(m => m.Id == id);
-        if (movie == null)
-        {
-            return NotFound();
-        }
-
-        return View(movie);
+        var movie = await _movieService.ObtenerDetalles(id);
+        return movie == null ? NotFound() : View(movie);
     }
 
     // POST: MOVIES/Delete/5
@@ -139,14 +108,16 @@ public class MoviesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var movie = await _context.Movie.FindAsync(id);
-        if (movie != null)
+        try
         {
-            _context.Movie.Remove(movie);
+            await _movieService.EliminarPelicula(id);
+            return RedirectToAction(nameof(Index));
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
         }
 
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
     }
 
     private bool MovieExists(int? id)

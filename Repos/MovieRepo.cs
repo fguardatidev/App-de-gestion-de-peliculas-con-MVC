@@ -45,5 +45,47 @@ namespace MvcMovie.Repos
 
             return movieGenreVM;
         }
+        
+        public async Task<Movie?> GetMovieByID(int id) //id != null debe verificarse en el metodo del servicio
+        {
+            try
+            {
+                var movie = await _context.Movie
+                                  .FirstOrDefaultAsync(m => m.Id == id);
+                return movie != null ? movie : null;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Movie> CreateMovie(Movie movie)
+        {
+            try
+            {
+                _context.Add(movie);
+                await _context.SaveChangesAsync();
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Movie?> DeleteMovie(Movie movie)
+        {
+           try
+           {
+              _context.Movie.Remove(movie);
+              await _context.SaveChangesAsync();
+              return movie;
+           }
+           catch (Exception ex)
+           {
+              throw new Exception(ex.Message);
+           }
+        }
     }
 }
