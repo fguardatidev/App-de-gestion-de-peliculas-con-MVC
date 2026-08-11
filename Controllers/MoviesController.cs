@@ -8,19 +8,19 @@ using MvcMovie.Services;
 public class MoviesController : Controller
 {
     private readonly MvcMovieContext _context;
-    private readonly IMovieService _obtenerPeliculasService;
+    private readonly IMovieService _movieService;
 
-    public MoviesController(MvcMovieContext context, MovieService obtenerPeliculasService)
+    public MoviesController(MvcMovieContext context, MovieService movieService)
     {
         _context = context;
-        _obtenerPeliculasService = obtenerPeliculasService;
+        _movieService = movieService;
     }
 
     // GET: MOVIES
     public async Task<IActionResult> Index(string movieGenre, string searchString)
     {
 
-        var movieGenreVM = await _obtenerPeliculasService.ObtenerPeliculas(movieGenre, searchString);
+        var movieGenreVM = await _movieService.ObtenerPeliculas(movieGenre, searchString);
 
         return View(movieGenreVM);
     }
