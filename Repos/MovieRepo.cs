@@ -18,14 +18,19 @@ namespace MvcMovie.Repos
             return _context.Movie == null;
         }
 
+
+        //separar la logica de obtener las peliculas y los generos, en mi opinion deberian fusionarse en el service
         public async Task<MovieGenreViewModel> GetMoviesByGenreOrTitle(string movieGenre, string searchString)
         {
+            /*
             // Use LINQ to get list of genres.
             IQueryable<string> genreQuery = from m in _context.Genre
                                             orderby m.Name
                                             select m.Name;
+            */
             var movies = from m in _context.Movie
                          select m;
+            
 
             if (!string.IsNullOrEmpty(searchString))
             {
