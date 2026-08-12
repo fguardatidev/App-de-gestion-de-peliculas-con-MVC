@@ -17,7 +17,6 @@ namespace MvcMovie.Services
 
         public async Task<MovieGenreViewModel> ObtenerPeliculas(string movieGenre, string searchString)
         {
-            //Task<MovieGenreViewModel> movieGenreViewModel;
             List<Movie> movies;
             SelectList genres;
 
