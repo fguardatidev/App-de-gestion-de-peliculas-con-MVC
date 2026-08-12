@@ -1,20 +1,25 @@
 ﻿using MvcMovie.Models;
 using MvcMovie.Repos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MvcMovie.Services
 {
     public class MovieService : IMovieService
     {
         private readonly MovieRepo movieRepo;
+        private readonly GenreRepo genreRepo;
 
-        public MovieService(MovieRepo _movieRepo)
+        public MovieService(MovieRepo _movieRepo, GenreRepo _genreRepo)
         {
             movieRepo = _movieRepo;
+            genreRepo = _genreRepo;
         }
 
-        public Task<MovieGenreViewModel> ObtenerPeliculas(string movieGenre, string searchString)
+        public async Task<MovieGenreViewModel> ObtenerPeliculas(string movieGenre, string searchString)
         {
-            Task<MovieGenreViewModel> movieGenreViewModel;
+            //Task<MovieGenreViewModel> movieGenreViewModel;
+            List<Movie> movies;
+            SelectList genres;
 
             if (movieRepo.IsContextNull())
             {
@@ -23,13 +28,20 @@ namespace MvcMovie.Services
             
             try
             {
-                movieGenreViewModel = movieRepo.GetMoviesByGenreOrTitle(movieGenre, searchString);
+                movies = await movieRepo.GetMoviesByGenreOrTitle(movieGenre, searchString); //obtengo las peliculas
+                genres = new SelectList(await genreRepo.GetGenres()); //obtengo los generos
             }
             
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+
+            var movieGenreViewModel = new MovieGenreViewModel //creo el view model con los datos obtenidos
+            {
+                Movies = movies,
+                Genres = genres
+            };
 
             return movieGenreViewModel;
         }
