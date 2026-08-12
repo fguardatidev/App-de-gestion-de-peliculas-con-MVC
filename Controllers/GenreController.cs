@@ -2,20 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Models;
+using MvcMovie.Services;
 
 public class GenreController : Controller
 {
     private readonly MvcMovieContext _context;
+    private readonly IGenreService _genreService;
 
-    public GenreController(MvcMovieContext context)
+    public GenreController(MvcMovieContext context, IGenreService genreService)
     {
         _context = context;
+        _genreService = genreService;
     }
 
     // GET: GENRES
     public async Task<IActionResult> Index()    
     {
-        return View(await _context.Genre.ToListAsync());
+        return View(await _genreService.ObtenerGeneros());
     }
 
     // GET: GENRES/Details/5

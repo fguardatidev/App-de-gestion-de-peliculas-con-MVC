@@ -13,8 +13,12 @@ namespace MvcMovie.Repos
             _context = context;
         }
 
+        public async Task<List<Genre>> GetGenres()
+        {
+            return await _context.Genre.ToListAsync();
+        }
 
-        public async Task<List<String>> GetGenres()
+        public async Task<List<String>> GetGenresString()
         {
             IQueryable<string> genreQuery =  from m in _context.Genre
                    orderby m.Name

@@ -28,7 +28,7 @@ namespace MvcMovie.Services
             try
             {
                 movies = await movieRepo.GetMoviesByGenreOrTitle(movieGenre, searchString); //obtengo las peliculas
-                genres = new SelectList(await genreRepo.GetGenres()); //obtengo los generos
+                genres = new SelectList(await genreRepo.GetGenresString()); //obtengo los generos
             }
             
             catch(Exception ex)

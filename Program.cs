@@ -11,8 +11,9 @@ builder.Services.AddDbContext<MvcMovieContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<MovieRepo>();
-builder.Services.AddScoped<MovieService>();
+builder.Services.AddScoped<IMovieService,MovieService>();
 builder.Services.AddScoped<GenreRepo>();
+builder.Services.AddScoped<IGenreService,GenreService>();
 
 
 var app = builder.Build();
