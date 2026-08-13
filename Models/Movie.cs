@@ -20,7 +20,6 @@ public class Movie : IValidatableObject
     public string? Genre { get; set; }
     */
     
-    [Required]
     public Genre? Genre { get; set; }
     
     public int GenreId { get; set; }

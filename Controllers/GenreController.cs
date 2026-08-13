@@ -24,13 +24,8 @@ public class GenreController : Controller
     // GET: GENRES/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        var genre = await _genreService.ObtenerDetalles(id);
 
-        var genre = await _context.Genre
-            .FirstOrDefaultAsync(m => m.Id == id);
         if (genre == null)
         {
             return NotFound();
@@ -52,28 +47,25 @@ public class GenreController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name")] Genre genre)
     {
-        if (ModelState.IsValid)
+        if(ModelState.IsValid)
         {
-            _context.Add(genre);
-            await _context.SaveChangesAsync();
+            await _genreService.CrearGenero(genre);
             return RedirectToAction(nameof(Index));
         }
+
         return View(genre);
     }
 
     // GET: GENRES/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        var genre = await _genreService.ObtenerDetalles(id);
 
-        var genre = await _context.Genre.FindAsync(id);
         if (genre == null)
         {
             return NotFound();
         }
+
         return View(genre);
     }
 
@@ -84,28 +76,19 @@ public class GenreController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? id, [Bind("Id,Name")] Genre genre)
     {
-        if (id != genre.Id)
-        {
-            return NotFound();
-        }
-
         if (ModelState.IsValid)
         {
             try
             {
-                _context.Update(genre);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GenreExists(genre.Id))
+                var result = await _genreService.EditarGenero(id, genre);
+                if(result == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+            }
+            catch
+            {
+                throw;
             }
             return RedirectToAction(nameof(Index));
         }
@@ -115,13 +98,8 @@ public class GenreController : Controller
     // GET: GENRES/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
+        var genre = await _genreService.ObtenerDetalles(id);
 
-        var genre = await _context.Genre
-            .FirstOrDefaultAsync(m => m.Id == id);
         if (genre == null)
         {
             return NotFound();
@@ -135,18 +113,7 @@ public class GenreController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var genre = await _context.Genre.FindAsync(id);
-        if (genre != null)
-        {
-            _context.Genre.Remove(genre);
-        }
-
-        await _context.SaveChangesAsync();
+        await _genreService.EliminarGenero(id);
         return RedirectToAction(nameof(Index));
-    }
-
-    private bool GenreExists(int? id)
-    {
-        return _context.Genre.Any(e => e.Id == id);
     }
 }

@@ -10,7 +10,7 @@ public class MoviesController : Controller
     private readonly MvcMovieContext _context;
     private readonly IMovieService _movieService;
 
-    public MoviesController(MvcMovieContext context, MovieService movieService)
+    public MoviesController(MvcMovieContext context, IMovieService movieService)
     {
         _context = context;
         _movieService = movieService;
@@ -44,7 +44,7 @@ public class MoviesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price,Rating,Director,Duration,Seen,PersonalRating")] Movie movie)
+    public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,GenreId,Price,Rating,Director,Duration,Seen,PersonalRating")] Movie movie)
     {
         if (ModelState.IsValid)
         {
