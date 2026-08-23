@@ -23,6 +23,7 @@ namespace MvcMovie.Repos
         public async Task<List<Movie>> GetMoviesByGenreOrTitle(string movieGenre, string searchString)
         {
             var movies = from m in _context.Movie
+                         .Include(m =>  m.Genre)
                          select m;
             
 
@@ -44,6 +45,7 @@ namespace MvcMovie.Repos
             try
             {
                 var movie = await _context.Movie
+                                  .Include(m => m.Genre)
                                   .FirstOrDefaultAsync(m => m.Id == id);
                 return movie != null ? movie : null;
             }

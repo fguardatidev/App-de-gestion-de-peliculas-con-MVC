@@ -54,7 +54,7 @@
                 @Html.DisplayFor(model => item.ReleaseDate)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Genre)
+                @item.Genre?.Name
             </td>
             <td>
                 @Html.DisplayFor(model => item.Price)
@@ -68,6 +68,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
