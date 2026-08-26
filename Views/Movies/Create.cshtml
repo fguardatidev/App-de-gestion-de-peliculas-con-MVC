@@ -32,8 +32,17 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="GenreId" class="control-label"></label>
-                <input asp-for="GenreId" class="form-control" />
+                <label>Genre</label>
+
+                <select id="genreSelect" class="form-control">
+                    <option value="">Seleccione un género</option>no
+                    @foreach(var genre in ViewBag.Genres)
+                        {
+                            <option value="@genre.Value">@genre.Text</option>
+                        }
+                </select>
+                @*<label asp-for="GenreId" class="control-label"></label>*@
+                <input asp-for="GenreId" type="hidden" class="form-control" />
                 <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>
 
@@ -77,3 +86,11 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section Scripts {
+    <script src="~/js/SeleccionarGenero.js" asp-append-version="true"></script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

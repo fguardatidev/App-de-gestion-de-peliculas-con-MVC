@@ -9,11 +9,13 @@ public class MoviesController : Controller
 {
     private readonly MvcMovieContext _context;
     private readonly IMovieService _movieService;
+    private readonly IGenreService _genreService;
 
-    public MoviesController(MvcMovieContext context, IMovieService movieService)
+    public MoviesController(MvcMovieContext context, IMovieService movieService, IGenreService genreService)
     {
         _context = context;
         _movieService = movieService;
+        _genreService = genreService;
     }
 
     // GET: MOVIES
@@ -34,8 +36,12 @@ public class MoviesController : Controller
     }
 
     // GET: MOVIES/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        var genres = await _genreService.ObtenerGeneros();
+
+        ViewBag.Genres = new SelectList(genres, "Id", "Name");
+
         return View();
     }
 
