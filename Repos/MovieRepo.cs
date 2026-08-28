@@ -82,5 +82,24 @@ namespace MvcMovie.Repos
               throw new Exception(ex.Message);
            }
         }
+
+        public async Task<Movie> EditMovie(Movie movie)
+        {
+            try
+            {
+                _context.Update(movie);
+                await _context.SaveChangesAsync();
+                return movie;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public bool MovieExists(int? id)
+        {
+            return _context.Movie.Any(e => e.Id == id);
+        }
     }
 }

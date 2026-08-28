@@ -12,5 +12,7 @@ namespace MvcMovie.Services
 
         public Task<Movie?> EliminarPelicula(int? id);
 
+        public Task<Movie> EditarPelicula(int? id, Movie movie);
+
     }
 }

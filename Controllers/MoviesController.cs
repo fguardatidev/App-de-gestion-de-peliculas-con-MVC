@@ -63,7 +63,12 @@ public class MoviesController : Controller
     // GET: MOVIES/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
+
+        var genres = await _genreService.ObtenerGeneros();
         var movie = await _movieService.ObtenerDetalles(id);
+
+        ViewBag.Genres = new SelectList(genres, "Id", "Name");
+
         return movie == null ? NotFound() : View(movie);
     }
 
@@ -72,34 +77,23 @@ public class MoviesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,ReleaseDate,Genre,Price,Rating,Director,Duration,Seen,PersonalRating")] Movie movie)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,ReleaseDate,GenreId,Price,Rating,Director,Duration,Seen,PersonalRating")] Movie movie)
     {
-        if (id != movie.Id)
+        if(!ModelState.IsValid)
         {
-            return NotFound();
+            return View(movie);
         }
 
-        if (ModelState.IsValid)
+        try
         {
-            try
-            {
-                _context.Update(movie);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(movie.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
+            await _movieService.EditarPelicula(id, movie);
         }
-        return View(movie);
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: MOVIES/Delete/5

@@ -79,5 +79,21 @@ namespace MvcMovie.Services
 
             return null;
         }
+
+        public async Task<Movie> EditarPelicula(int? id, Movie movie)
+        {
+            if(id == null || id != movie.Id)
+            {
+                throw new Exception("El id es nulo o no coincide con el de la película a editar.");
+            }
+
+            if(!movieRepo.MovieExists((int) id))
+            {
+                throw new Exception("La película a editar no existe.");
+            }
+            
+            await movieRepo.EditMovie(movie);
+            return movie;
+        }
     }
 }
